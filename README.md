@@ -36,6 +36,8 @@ Although the percentage of test samples looks quite small, given the number of o
 
 
 ### Data Transformation
+The datasets we used were acquired directly from the Hugging Face Datasets library. The Gigaword and Multi_news datasets have two string fields, document and summary. The CNN_dailymail has 3 string fields: id, article, and highlights, so prior to the concatenation of datasets, we renamed the 'article' column to 'document', the 'highlights' column to 'summary', and removed the 'id' column from the CNN_dailymail dataset. Then the concatenation of the 3 datasets was performed, into the predetermined split of Training, Validation, and Test sets.
+
 
 
 
