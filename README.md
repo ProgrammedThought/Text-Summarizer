@@ -48,6 +48,40 @@ The average document length is: 31.42806819227382 words, and the average summary
 | and             | 1.29          | as                 | 0.58          |
 
 
+#### Validation Data
+There are 5690 validation samples in our dataset. 
+The average document length is: 31.138137082601055 words, and the average summary length is: 7.9195079086116 words, in the validation set. There are 14086 unique words, and a total of 177176 words in the documents, and 7873 unique words, and a total of 45062 words in the summary of the validation set. The most commonly used words in the validation set and their frequencies are as follows:
+
+| Word (Document) | Frequency (%) | Word (Summary)     | Frequency (%) |
+| --------------- | ------------- | ------------------ | ------------- |
+| the             | 4.83          | to                 | 3.35          |
+| .               | 3.21          | in                 | 2.98          |
+| ,               | 3.05          | for                | 1.78          |
+| a               | 2.65          | of                 | 1.49          |
+| of              | 2.49          | 's                 | 1.44          |
+| to              | 2.44          | on                 | 1.18          |
+| in              | 2.25          | us                 | 1.07          |
+| on              | 1.68          | unk                | 0.84          |
+| 's              | 1.36          | over               | 0.59          |
+| said            | 1.32          | ##                 | 0.53          |
+
+#### Test Data
+There are 1951 validation samples in our dataset. 
+The average document length is: 29.69656586365966 words, and the average summary length is: 8.791901588925754 words, in the test set. There are 9445 unique words, and a total of 57938 words in the documents, and 5096 unique words, and a total of 17153 words in the summary of the test set. The most commonly used words in the test set and their frequencies are as follows:
+
+| Word (Document) | Frequency (%) | Word (Summary)     | Frequency (%) |
+| --------------- | ------------- | ------------------ | ------------- |
+| the             | 4.96          | unk                | 4.89          |
+| ,               | 3.52          | to                 | 2.83          |
+| .               | 3.21          | in                 | 2.81          |
+| a               | 2.63          | :                  | 2.10          |
+| of              | 2.54          | of                 | 1.61          |
+| to              | 2.30          | for                | 1.31          |
+| in              | 2.23          | 's                 | 1.07          |
+| and             | 1.61          | on                 | 0.99          |
+| on              | 1.37          | by                 | 0.89          |
+| 's              | 1.18          | with               | 0.73          |
+
 
 ### Data Transformation
 Since our data is Text. To prepare our data for input to the model, we used the pretrained BertTokenizer ('bert-base-uncased') to convert the text into a sequence of tokens. Followed by an embedding layer to create numerical representation of the tokens and assemble them into tensors, with the shape (30522, 256).
