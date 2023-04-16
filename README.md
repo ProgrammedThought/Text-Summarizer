@@ -12,70 +12,65 @@ We will be creating a Natural Language Processing Transformer Model that perform
 
 ## Data
 ### Data Sources
-Our dataset is a subset of the "Gigaword" dataset, acquired from the Hugging Face Dataset library. Gigaword is the largest dataset available to be used for the task of summarization, with 3.8 million training samples, 189k validation samples and 1951 test samples. 
+Our dataset is a subset of the "Gigaword" dataset, acquired from the Hugging Face Dataset library. Gigaword is the largest dataset available to be used for the summarization task, with 3.8 million training samples, 189k validation samples and 1951 test samples. 
 
 ### Data Split
-As per our initial idea, we planned to combine and use 3 complete datasets from the Hugging Face dataset library, "Gigaword", "Multi_news", and "CNN_dailymail",  but due to the lack of computational resources, we quickly realized that is not viable and we have to subset the data. We decided to use a subset of the Gigaword Dataset's training samples, as it is the largest of the 3, to ensure variability of characteristics and context in our data to help the model generalize and learn appropriately.
+As per our initial idea, we planned to combine and use 3 complete datasets from the Hugging Face dataset library, "Gigaword", "Multi_news", and "CNN_dailymail",  but due to the lack of computational resources, we quickly realized that is not viable and we have to subset the data. We decided to use a subset of the Gigaword Dataset, as it is the largest of the 3, to ensure variability of characteristics and context in our data to help the model generalize and learn appropriately.
 
 
 **Gigaword:**
 Train: 3803957 (95%), Validation: 189651(4.75%), Test: 1951(0.25%)
 
 **Subset Dataset:**
-Train: 114119 (85%), Validation: 18965 (14%), Test: 1951(1%)
+Train: 76079 (91%), Validation: 5690 (6%), Test: 1951(3%)
 
-Although the percentage of test samples looks quite small, given the number of observations we believe it is sufficient to estimate the performance the model well. 
+We believe this subset accurately represents the dataset and has a sufficient number of samples for the model to be trained and perform well. 
 
 ### Data Summary
 To accurately interpret our results, we collected summary statistics on our dataset. 
 
 
 ### Data Transformation
-Since our data is Text. To prepare our data for input to the model, we used the pretrained GPT2 Autotokenizer to convert the text into a sequence of tokens. 
+Since our data is Text. To prepare our data for input to the model, we used the pretrained BertTokenizer ('bert-base-uncased') to convert the text into a sequence of tokens. Followed by a glove embedding layer to create numerical representation of the tokens and assemble them into tensors, with the shape (30522, 256).
 
 ```python
 
-from transformers import AutoTokenizer
-tokenizer = AutoTokenizer.from_pretrained("gpt2", special_tokens=[['BOS']])
-tokenizer.pad_token = tokenizer.eos_token
-inp_lst = []
+from transformers import BertTokenizer
+tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 
 def preprocess_function(examples):
-    inputs = [doc for doc in examples['document']]
-    model_inputs = tokenizer(inputs, padding=True, return_tensors="pt")
-    labels = tokenizer(text_target=examples["summary"], padding=True, return_tensors='pt')
+    model_inputs = tokenizer(examples['document'], padding='max_length', \
+                             max_length=75, add_special_tokens=True)
+    labels = tokenizer(text_target=examples["summary"], padding='max_length', \
+                       max_length=70, add_special_tokens=True)
     model_inputs["labels"] = labels["input_ids"]
-    inp_lst.append((model_inputs["input_ids"], labels["input_ids"]))
+    model_inputs["labels_mask"] = labels["attention_mask"]
     return model_inputs
+    
 ```
 
-The tokenization of an example sentence:
+The tokenization and embedding of an example sentence:
 
 ```python
-sents = "He was able to train it without any problems."
-ids =  tokenizer(sents, padding=True, return_tensors='pt')
-print(ids) 
-# tensor([[1544,  373, 1498,  284, 4512,  340, 1231,  597, 2761,   13]])
-```
+example = {'document': "a powerful rally tuesday helped wall street recoup some losses from monday 's rout , 
+            amid renewed hope for us passage of a financial rescue package .",
+            'summary': 'big rally helps wall street recoup part of record plunge'}
+ex_token = preprocess_function(example)
+
+print(ex_token['input_ids']) # [101, 1037, 3928, 8320, 9857, 3271, 2813, 2395, 28667, 7140, 2361, 2070, 6409, 2013, 6928, 1005, 1055, 20996, 4904, 1010, 13463, 9100, 3246, 2005, 2149, 6019, 1997, 1037, 3361, 5343, 7427, 1012, 102]
+
+print(ex_token['labels']) #[101, 2502, 8320, 7126, 2813, 2395, 28667, 7140, 2361, 2112, 1997, 2501, 25912, 102]
 
 
-Followed by a glove embedding layer to create numerical representation of the tokens and assemble them into tensors, using Glove 6B with dimension 50 (6 Billion tokens and 50 Features).
-
-
-```python
-from torchtext.vocab import GloVe
-glove = GloVe(name='6B', dim=50)
-
-def glove_embed(data):
-    max_length = 0 
-    for i in range(len(data)):
-        max_length = max(max_length, len(data[i]))
-    tensor = torch.empty(len(data), max_length, EMB_DIM)
-    for i in range(len(data)):
-        words = tokenizer.convert_ids_to_tokens(data[i])
-        emb = glove.get_vecs_by_tokens(words, lower_case_backup=True)
-        tensor[i] = emb
-    return tensor
+example_emb = nn.Embedding(30522, 256)
+inp_emb = example_emb(torch.tensor(ex_token['input_ids']))
+print(inp_emb) # tensor([[ 0.9791,  0.8341,  0.0265,  ...,  0.1341,  0.3989,  2.0854],
+                        [-0.1030,  2.0953, -1.2685,  ..., -1.3507,  1.0663, -0.5291],
+                        [ 2.4593, -0.0891, -0.9599,  ..., -0.4411,  1.6811, -0.5325],
+                        ...,
+                        [ 0.2698, -1.0205,  0.5904,  ...,  0.5692, -0.6299,  0.2383],
+                        [ 0.2698, -1.0205,  0.5904,  ...,  0.5692, -0.6299,  0.2383],
+                        [ 0.2698, -1.0205,  0.5904,  ...,  0.5692, -0.6299,  0.2383]])
 
 ```
 
