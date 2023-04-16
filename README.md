@@ -31,7 +31,7 @@ To accurately interpret our results, we collected summary statistics on our data
 
 
 ### Data Transformation
-Since our data is Text. To prepare our data for input to the model, we used the pretrained BertTokenizer ('bert-base-uncased') to convert the text into a sequence of tokens. Followed by a glove embedding layer to create numerical representation of the tokens and assemble them into tensors, with the shape (30522, 256).
+Since our data is Text. To prepare our data for input to the model, we used the pretrained BertTokenizer ('bert-base-uncased') to convert the text into a sequence of tokens. The [CLS] and [SEP] tokens were added to the start and end of each sequence, and the sequences were padded using a fixed size padding. The tokens were further converted into a numeric representation where each word was mapped to its corresponding index in the vocabulary. This was followed by an embedding layer that has a size of (30522, 256) where 30522 is the size of the vocabulary and 256 is the embedding size. This was done to create numerical representation of the tokens and assemble them into tensors.
 
 ```python
 
@@ -57,6 +57,7 @@ example = {'document': "a powerful rally tuesday helped wall street recoup some 
             'summary': 'big rally helps wall street recoup part of record plunge'}
 ex_token = preprocess_function(example)
 
+# convert tokens to their vocabulary index representation ( 101 is the [CLS] token and 102 is the [SEP] token)
 print(ex_token['input_ids']) # [101, 1037, 3928, 8320, 9857, 3271, 2813, 2395, 28667, 7140, 2361, 2070, 6409, 2013, 6928, 1005, 1055, 20996, 4904, 1010, 13463, 9100,   3246, 2005, 2149, 6019, 1997, 1037, 3361, 5343, 7427, 1012, 102]
 print(ex_token['labels']) #[101, 2502, 8320, 7126, 2813, 2395, 28667, 7140, 2361, 2112, 1997, 2501, 25912, 102]
 
