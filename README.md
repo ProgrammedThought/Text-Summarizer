@@ -4,6 +4,35 @@
 We will be creating a Natural Language Processing Transformer Model that performs Abstractive Text Summarization. Given a document, article, or body of text, the model will return a concise summary of the provided text. Since we are dealing with sequential data, we will be using a transformer provided by Pytorch, with a bidirectional encoder and an autoregressive decoder, and fine-tuning it to enhance performance as required for the task. 
 
 ## Model
+As we are creating a text summarizer model, our model architecture is the same as the one described in the paper “Attention is all you need” Ashish Vaswani et al. 
+
+We start by tokenizing our data. This is decribed in detail in the data transformation section below.
+
+After the data has been tokenized, its vector representation, an embedding, is generated. In this project, we are using a pre-trained embedding, which essentially looks up the respective embedding for the token given to it.
+
+Unlike a recurrent neural network, the transformer architecture does not have a notion of sequential order built into it. Therefore, to give the transformer some information about the position of each token, positional encodings are calculated separately. The function used to find positional encoding is the same function used in the paper mentioned above. Specifically, the encoding contains sine and cosine functions of different frequencies, which enable the model to differentiate between tokens at different positions.
+
+Before our encoder architecture, the word embeddings and positional encodings are added together element-wise to create a combined input representation. This combined representation is then passed through several layers in the encoder layer. 
+
+The first sub-layer in each encoder unit is a multi-head self-attention mechanism. It receives the combined input representation and calculates a new set of embeddings that have attended to all positions in the sequence, effectively creating a representation of the entire sequence.
+
+After this layer there is a “Add & Norm” or residual layer that adds the input embeddings to the output embeddings of the previous layer and normalizes it. This helps to mitigate the vanishing gradient problem, allows gradients to flow more easily through the network during training, and improves the generalization performance of the network. 
+
+Then the outputs are passed through a fully connected layer which allows each position to interact with the other positions through a non-linear function to increase the expressiveness of the encoder.
+
+Finally, the outputs from the previous layer are passed through another residual layer for the same reason described earlier. 
+ 
+This forms one unit of the encoder layer. We will be using multiple layers in our model that are stacked together so that the model can capture complex relationships between input tokens allowing it to learn more complicated patterns and relationships in the data.
+
+In the decoder layer, we similarly encode the outputs by creating the word embeddings and positional encodings and adding them together element-wise which is passed through a multi-head attention and residual layer exactly as before for the same reasons. 
+
+Then these hidden output states and the outputs from the encoder layer are passed through another multi-head attention layer. The purpose of this mechanism is to compute a weighted sum of the encoder output, where the weights are computed based on the similarity between the decoder's current hidden state and each encoder output vector. 
+
+Finally, the output of this layer is passed through a residual layer, a fully connected layer, and another residual layer for the same reasons as discussed earlier. 
+
+The decoder unit is then stacked as well. Each unit can learn to focus on different aspects of the input and output sequences, and the final layer can combine all of this information to generate the final output sequence. The model can learn to attend to different parts of the input and output sequences at different levels of abstraction.
+
+
 ### Model Figure
 
 ### Model Parameters
