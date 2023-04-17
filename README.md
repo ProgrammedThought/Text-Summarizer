@@ -175,6 +175,9 @@ print(inp_emb) # tensor([[ 0.9791,  0.8341,  0.0265,  ...,  0.1341,  0.3989,  2.
 ### Training Curve
 
 ### Hyperparameter Tuning
+### Quantitative Measures
+
+For our purposes, computing accuracy did not seem reasonable since a generated summary may not be exactly the same as the target sumamry, but can still effectively summarize the given text. Thus, we used ROUGE (Recall-Oriented Understudy for Gisting Evaluation) scores to evaluate quality of the generated summary. ROUGE is typically used for summarization tasks as it measures the overlap between generated summary and target summary. For this task we used Rouge-1 scores, which measures the overlap of unigrams (individual words) between the generated summary and the target summary. Moreover, we used the f1 score from Rouge-1 which the harmonic mean between precision and recall. In this context, precision is the ratio between the number of overlapping words between the generated summary and the target summary and total number of words in the generated summary. It measures how concise the generated summary is. Recall is the ratio between the number of overlapping words between the generated summary and the target summary and total number of words in the target summary. It measures how accurate the generated summary is. The f1 score combines both of these measures into one value by and measures how concise and accurate a summary is. Hence, the Rouge-1 f1 score is an appropriate quatitative measure for this task.
 
 ## Results
 
