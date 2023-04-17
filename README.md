@@ -176,11 +176,11 @@ print(inp_emb) # tensor([[ 0.9791,  0.8341,  0.0265,  ...,  0.1341,  0.3989,  2.
 
 The training curves of the model are:
 
-<img src="images/Iterloss.png" width="450"/>
+<img src="Images/Iterloss.png" width="450"/>
 
-<img src="images/EpochLoss2.png" width="450"/>
+<img src="Images/EpochLoss2.png" width="450"/>
 
-<img src="images/RogueScore.png" width="450"/>
+<img src="Images/RogueScore.png" width="450"/>
 
 
 
