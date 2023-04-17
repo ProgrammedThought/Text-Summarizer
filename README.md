@@ -174,6 +174,16 @@ print(inp_emb) # tensor([[ 0.9791,  0.8341,  0.0265,  ...,  0.1341,  0.3989,  2.
 ## Training
 ### Training Curve
 
+The training curves of the model are:
+
+<img src="images/Iterloss.png" width="450"/>
+
+<img src="images/EpochLoss2.png" width="450"/>
+
+<img src="images/RogueScore.png" width="450"/>
+
+
+
 ### Hyperparameter Tuning
 
 The hyperparameters that we tuned in the model are batch size, learning rate, number of heads in the multiheadattention models, the number of sub-encoder-layers in the encoder, and the number of sub-decoder-layers in the decoder. 
