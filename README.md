@@ -46,7 +46,7 @@ There is also a feed-forward component. The feed-forwad network has 2 layers, on
 
 Each encoder consists of 1 Multi-Attention Head (with 4 attention heads), 2 Layer Normalization layers, and 1 Feed-Forward Network. Therefore, the total number of parameters in both encoders combined is given by: Parameters(Encoders) = $(263168 + (2 \times 512) + 1050880) \times 2 = 2630144$
 
-Each decoder consists of 2 Multi-Attention Head (with 4 attention heads), 3 Layer Normalization layers, and 1 Feed-Forward Network. Therefore, the total number of parameters in both encoders combined is given by: Parameters(Encoders) = $((2 \times 263168) + 3( \times 512) + 1050880) \times 2 = 3157504$
+Each decoder consists of 2 Multi-Attention layers (with 4 attention heads), 3 Layer Normalization layers, and 1 Feed-Forward Network. Therefore, the total number of parameters in both encoders combined is given by: Parameters(Encoders) = $((2 \times 263168) + 3( \times 512) + 1050880) \times 2 = 3157504$
 
 The total number of parameters in the model is: Parameters(TransformerModel) = $2630144 + 3157504 = 5787648$.
 
@@ -217,7 +217,11 @@ Using checkpointing, we found it best to train the model for 11 epochs, as after
 
 ### Quantitative Measures
 
-For our purposes, computing accuracy did not seem reasonable since a generated summary may not be exactly the same as the target sumamry, but can still effectively summarize the given text. Thus, we used ROUGE (Recall-Oriented Understudy for Gisting Evaluation) scores to evaluate quality of the generated summary. ROUGE is typically used for summarization tasks as it measures the overlap between generated summary and target summary. For this task we used Rouge-1 scores, which measures the overlap of unigrams (individual words) between the generated summary and the target summary. Moreover, we used the f1 score from Rouge-1 which the harmonic mean between precision and recall. In this context, precision is the ratio between the number of overlapping words between the generated summary and the target summary and total number of words in the generated summary. It measures how concise the generated summary is. Recall is the ratio between the number of overlapping words between the generated summary and the target summary and total number of words in the target summary. It measures how accurate the generated summary is. The f1 score combines both of these measures into one value by and measures how concise and accurate a summary is. Hence, the Rouge-1 f1 score is an appropriate quatitative measure for this task.
+For our purposes, computing accuracy by strictly comparing the words used and thier specific order between the generated summary and the target summary did not seem reasonable since a generated summary may not be exactly the same as the target sumamry, but may still effectively summarize the given text. 
+
+Thus, we used ROUGE (Recall-Oriented Understudy for Gisting Evaluation) scores to evaluate quality of the generated summary. ROUGE is typically used for summarization tasks as it measures the overlap between generated summary and target summary. For this task we used Rouge-1 scores, which measures the overlap of unigrams (individual words) between the generated summary and the target summary. Moreover, we used the f1 score from Rouge-1 which the harmonic mean between precision and recall. 
+
+In this context, precision is the ratio between the number of overlapping words between the generated summary and the target summary and total number of words in the generated summary. It measures how concise the generated summary is. Recall is the ratio between the number of overlapping words between the generated summary and the target summary and total number of words in the target summary. It measures how accurate the generated summary is. The f1 score combines both of these measures into one value by and measures how concise and accurate a summary is. Hence, the Rouge-1 f1 score is an appropriate quatitative measure for this task.
 
 ## Results
 Evaluating from a qualitative perspective, the model was able to generate coherent and grammatically correct outputs given the input text. However, sometimes the outputs were completely irrelevent to the input text and other times they were an exact match to the target sequence.
