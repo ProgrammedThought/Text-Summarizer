@@ -54,20 +54,20 @@ The total number of parameters in the model is: Parameters(TransformerModel) = $
 
 **The following is an example of a successful abstractive summarization performed by the model, with a Rouge score of: 0.999999995.**
 
-**Input:** jakarta share prices closed #. # percent lower tuesday amid selling pressure on heavyweight stocks, brokers said.
-
-**Target:** jakarta shares close #. # percent lower
-
-**Model Output:** jakarta shares close #. # percent lower
+>**Input:** jakarta share prices closed #. # percent lower tuesday amid selling pressure on heavyweight stocks, brokers said.
+>
+>**Target:** jakarta shares close #. # percent lower
+>
+>**Model Output:** jakarta shares close #. # percent lower
 
 
 **The following is an example of an unsuccesful summarization performed by the model, with a Rouge score of: 0.08695651674858251.**
 
-**Input:**  federal regulators, moving to reduce the fees local baby bell companies charge to connect long - distance calls, said today they may let the industry bring the charges down gradually without imposing a government timetable.
-
-**Target:**  u. s. fcc moves to gradually cut long distance access charges
-
-**Model Output:**  federal reserve says boss has no plans for a decade
+>**Input:**  federal regulators, moving to reduce the fees local baby bell companies charge to connect long - distance calls, said today they may let the industry bring the charges down gradually without imposing a government timetable.
+>
+>**Target:**  u. s. fcc moves to gradually cut long distance access charges
+>
+>**Model Output:**  federal reserve says boss has no plans for a decade
 
 
 ## Data
