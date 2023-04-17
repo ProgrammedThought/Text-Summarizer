@@ -32,8 +32,10 @@ Finally, the output of this layer is passed through a residual layer, a fully co
 
 The decoder unit is then stacked as well. Each unit can learn to focus on different aspects of the input and output sequences, and the final layer can combine all of this information to generate the final output sequence. The model can learn to attend to different parts of the input and output sequences at different levels of abstraction.
 
-
 ### Model Figure
+
+<img src="Images/Model diagram.png" width="450"/>
+
 
 ### Model Parameters
 The model has 2 encoder and decoder layers. Each encoder contains 4 Multi-attention Heads, 1 feed-forward network, and 2 Layer normalization layers. Each of these have a certainnumber of parameters.
@@ -46,7 +48,7 @@ There is also a feed-forward component. The feed-forwad network has 2 layers, on
 
 Each encoder consists of 1 Multi-Attention Head (with 4 attention heads), 2 Layer Normalization layers, and 1 Feed-Forward Network. Therefore, the total number of parameters in both encoders combined is given by: Parameters(Encoders) = $(263168 + (2 \times 512) + 1050880) \times 2 = 2630144$
 
-Each decoder consists of 2 Multi-Attention layers (with 4 attention heads), 3 Layer Normalization layers, and 1 Feed-Forward Network. Therefore, the total number of parameters in both encoders combined is given by: Parameters(Encoders) = $((2 \times 263168) + 3( \times 512) + 1050880) \times 2 = 3157504$
+Each decoder consists of 2 Multi-Head attention layers (with 4 attention heads), 3 Layer Normalization layers, and 1 Feed-Forward Network. Therefore, the total number of parameters in both encoders combined is given by: Parameters(Encoders) = $((2 \times 263168) + 3( \times 512) + 1050880) \times 2 = 3157504$
 
 The total number of parameters in the model is: Parameters(TransformerModel) = $2630144 + 3157504 = 5787648$.
 
