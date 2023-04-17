@@ -36,6 +36,19 @@ The decoder unit is then stacked as well. Each unit can learn to focus on differ
 ### Model Figure
 
 ### Model Parameters
+The model has 2 encoder and decoder layers. Each encoder contains 4 Multi-attention Heads, 1 feed-forward network, and 2 Layer normalization layers. Each of these have a certainnumber of parameters.
+
+The shapes of $W_{Q}$, $W_{K}$, and $W_{V}$ are given by (dmodel, $\frac{dmodel}{nheads}$), where dmodel is the embedding size and nheads is the number of attention heads. Using an embedding size of 256, and 4 attention heads, the dimensions of $W_{Q}$, $W_{K}$, $W_{V}$ are $256 \times 64$ each. Each weight matrix also has a bias term which has a shape of $64 \times 1$. Additionally, the final weight matrix that is applied after concatenation, $W_{O}$ has a shape of dmodel x dmodel, which results in a shape of $256 \times 256$. $W_{O}$ also has a bias term with shape $256 \times 1$. The number of parameters of all 4 attention head is given by: Parameters(Multi-attention Heads) = $(256 \times 256 + 256) + (64 \times 256 + 64) \times 3 \times 4 = 263168$.
+
+Next we have layer normalization parameters. Each layer norm has 2 learnable parameters per embedding dimension. Thus the number of parameters is given by: Parameters(LayerNorm) = $2 \times 256 = 512$
+
+There is also a feed-forward component. The feed-forwad network has 2 layers, one with 2048 hidden units and the other with 256 hidden units. Thus,  $W_{1}$ has shape $256 \times 2048$, $W_{2}$ has shape $2048 \times 256$. The bias terms, $b_{1}$, $b_{2}$ have shapes 2048 x 1 and $256 \times 1$, respectively. Hence, the total parameters in the feed-forward network is given by: Parameters(Feed-Forward) = $(256 \times 2048 + 2048) + (2048 \times 256 + 256) = 1050880$
+
+Each encoder consists of 1 Multi-Attention Head (with 4 attention heads), 2 Layer Normalization layers, and 1 Feed-Forward Network. Therefore, the total number of parameters in both encoders combined is given by: Parameters(Encoders) = $(263168 + (2 \times 512) + 1050880) \times 2 = 2630144$
+
+Each decoder consists of 2 Multi-Attention Head (with 4 attention heads), 3 Layer Normalization layers, and 1 Feed-Forward Network. Therefore, the total number of parameters in both encoders combined is given by: Parameters(Encoders) = $((2 \times 263168) + 3( \times 512) + 1050880) \times 2 = 3157504$
+
+The total number of parameters in the model is: Parameters(TransformerModel) = $2630144 + 3157504 = 5787648$.
 
 ### Model Examples
 
